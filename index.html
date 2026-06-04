@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aesthetic Timer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div id="bg-layer" class="bg-layer"></div>
+
+    <header class="app-header">
+        <button id="menu-btn" class="icon-btn" title="メニュー">
+            <i data-lucide="menu"></i>
+        </button>
+    </header>
+
+    <nav id="nav-drawer" class="nav-drawer glass-panel hidden">
+        <div class="nav-items">
+            <button class="nav-btn active" data-tab="timer" title="タイマー">
+                <i data-lucide="timer"></i>
+                <span class="nav-label">タイマー</span>
+            </button>
+            <button class="nav-btn" data-tab="alarm" title="アラーム">
+                <i data-lucide="bell"></i>
+                <span class="nav-label">アラーム</span>
+            </button>
+            <button class="nav-btn" data-tab="pomodoro" title="ポモドーロ">
+                <i data-lucide="focus"></i>
+                <span class="nav-label">ポモドーロ</span>
+            </button>
+            <div class="nav-divider"></div>
+            <button class="nav-btn" data-tab="settings" title="設定">
+                <i data-lucide="settings"></i>
+                <span class="nav-label">設定</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="app-wrapper">
+        <main class="main-content">
+            
+            <section id="tab-timer" class="tab-content active">
+                <div class="timer-modes-wrapper">
+                    <!-- Timer Carousel Viewport -->
+                    <div id="timer-viewport" class="timer-viewport">
+                        <div id="timer-pills" class="timer-pills">
+                            <!-- Pill buttons injected here -->
+                        </div>
+                    </div>
+                    
+                    <div class="timer-modes-actions">
+                        <button id="timer-toggle-expand" class="icon-btn small outline-btn" title="すべて表示">
+                            <i data-lucide="chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="central-display">
+                    <div id="timer-time" class="time-huge">10:00</div>
+                    <div class="controls-row">
+                        <button id="timer-start-btn" class="btn primary huge">Start</button>
+                        <button id="timer-reset-btn" class="icon-btn huge">
+                            <i data-lucide="rotate-ccw"></i>
+                        </button>
+                        <button id="timer-add-btn" class="icon-btn huge" title="追加">
+                            <i data-lucide="plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-alarm" class="tab-content">
+                <button id="alarm-add-btn" class="icon-btn fixed-top-right" title="追加">
+                    <i data-lucide="plus"></i>
+                </button>
+                <div class="alarm-container glass-panel" style="padding: 24px; max-width: 800px; margin: 0 auto; width: 100%;">
+                    <div id="alarm-list" class="alarm-list"></div>
+                </div>
+            </section>
+
+            <section id="tab-pomodoro" class="tab-content">
+                <div class="pomodoro-modes">
+                    <button class="mode-btn active" data-mode="pomodoro">Pomodoro</button>
+                    <button class="mode-btn" data-mode="shortBreak">Short Break</button>
+                    <button class="mode-btn" data-mode="longBreak">Long Break</button>
+                </div>
+                <div class="central-display">
+                    <div id="pomodoro-time" class="time-huge">25:00</div>
+                    <div class="controls-row">
+                        <button id="pomo-start-btn" class="btn primary huge">Start</button>
+                        <button id="pomo-reset-btn" class="icon-btn huge">
+                            <i data-lucide="rotate-ccw"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal-settings" class="modal-overlay hidden">
+        <div class="modal-content glass-panel" style="max-width: 500px; padding: 0; display: flex; flex-direction: column; max-height: 85vh;">
+            <header style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--glass-border);">
+                <h2 style="margin: 0; font-size: 1.2rem;">設定</h2>
+                <button id="settings-close-btn" class="icon-btn small" title="閉じる"><i data-lucide="x"></i></button>
+            </header>
+            <div class="settings-tabs-row" style="display: flex; overflow-x: auto; padding: 0 16px; border-bottom: 1px solid var(--glass-border); gap: 8px; flex-shrink: 0;">
+                <button class="settings-tab-btn active" data-settings-tab="general">共通</button>
+                <button class="settings-tab-btn" data-settings-tab="timer">タイマー</button>
+                <button class="settings-tab-btn" data-settings-tab="alarm">アラーム</button>
+                <button class="settings-tab-btn" data-settings-tab="pomodoro">ポモドーロ</button>
+            </div>
+            <div class="settings-main" style="padding: 20px; overflow-y: auto; flex: 1;">
+                <div class="settings-scroll" style="padding-right: 0; display: block;">
+                    <!-- General Tab -->
+                    <div id="settings-pane-general" class="settings-pane active">
+                        <div class="settings-group">
+                            <h3>背景</h3>
+                            <div class="setting-item">
+                                <label>プリセット</label>
+                                <select id="setting-bg-preset">
+                                    <option value="default">デフォルト (Dark)</option>
+                                    <option value="gradient-aurora">オーロラ</option>
+                                    <option value="gradient-ocean">オーシャン</option>
+                                    <option value="image-nature">ネイチャー写真</option>
+                                    <option value="image-space">宇宙・ギャラクシー</option>
+                                    <option value="image-desk">ミニマルデスク</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="settings-group" style="margin-top: 24px;">
+                            <h3>音声と通知</h3>
+                            <div class="setting-item">
+                                <label>タイマー音</label>
+                                <select id="setting-sound-timer">
+                                    <option value="./sounds/timer-bell.mp3">ベル</option>
+                                    <option value="./sounds/timer-chime.mp3">チャイム</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <label>アラーム音</label>
+                                <select id="setting-sound-alarm">
+                                    <option value="./sounds/alarm-clock.mp3">目覚まし時計</option>
+                                    <option value="./sounds/alarm-digital.mp3">デジタルアラーム</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <label>ポモドーロ音</label>
+                                <select id="setting-sound-pomo">
+                                    <option value="./sounds/pomo-hato.mp3">鳩時計</option>
+                                    <option value="./sounds/pomo-kirakira.mp3">キラン</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <label title="1回だけ鳴らすか、ストップするまで鳴らすか">通知の動作</label>
+                                <select id="setting-loop">
+                                    <option value="once">1回のみ</option>
+                                    <option value="loop">ストップするまでループ</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timer Tab -->
+                    <div id="settings-pane-timer" class="settings-pane hidden">
+                        <div class="settings-group">
+                            <h3>タイマーの管理</h3>
+                            <div id="settings-management-list-timer" style="display: flex; flex-direction: column; gap: 12px;">
+                                <!-- List populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alarm Tab -->
+                    <div id="settings-pane-alarm" class="settings-pane hidden">
+                        <div class="settings-group">
+                            <h3>アラームの管理</h3>
+                            <div id="settings-management-list-alarm" style="display: flex; flex-direction: column; gap: 12px;">
+                                <!-- List populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pomodoro Tab -->
+                    <div id="settings-pane-pomodoro" class="settings-pane hidden">
+                        <div class="settings-group">
+                            <h3>ポモドーロの動作</h3>
+                            <div class="setting-item" style="align-items: flex-start; flex-direction: column; gap: 8px;">
+                                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                                    <label>自動で休憩へ進む</label>
+                                    <label class="switch">
+                                        <input type="checkbox" id="setting-pomo-auto">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <small style="color: var(--text-muted); line-height: 1.4; margin-top: 4px;">
+                                    オンの場合: Pomodoro → Short Break を4回繰り返した後、Long Break へ自動的に進みます。
+                                </small>
+                            </div>
+                            
+                            <div class="setting-item" style="align-items: flex-start; flex-direction: column; gap: 12px; margin-top: 12px;">
+                                <label>各モードの時間（分）</label>
+                                <div style="display: flex; gap: 12px; width: 100%; align-items: center; justify-content: space-between;">
+                                    <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                                        <span style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Pomodoro</span>
+                                        <input type="number" id="setting-pomo-pomo" min="1" max="120" style="width: 100%; text-align: center;">
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                                        <span style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Short</span>
+                                        <input type="number" id="setting-pomo-short" min="1" max="60" style="width: 100%; text-align: center;">
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                                        <span style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Long</span>
+                                        <input type="number" id="setting-pomo-long" min="1" max="60" style="width: 100%; text-align: center;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-timer" class="modal-overlay hidden">
+        <div class="modal-content glass-panel">
+            <h3 id="modal-timer-title">タイマーを追加</h3>
+            <div class="form-group">
+                <label>名前</label>
+                <input type="text" id="modal-timer-name" placeholder="例: 勉強">
+            </div>
+            <div class="form-group time-inputs">
+                <div class="time-col">
+                    <label>時間</label>
+                    <input type="number" id="modal-timer-h" min="0" max="99" value="0">
+                </div>
+                <div class="time-col">
+                    <label>分</label>
+                    <input type="number" id="modal-timer-m" min="0" max="59" value="10">
+                </div>
+                <div class="time-col">
+                    <label>秒</label>
+                    <input type="number" id="modal-timer-s" min="0" max="59" value="0">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="modal-timer-cancel" class="btn">キャンセル</button>
+                <button id="modal-timer-save" class="btn primary">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-alarm" class="modal-overlay hidden">
+        <div class="modal-content glass-panel">
+            <h3 id="modal-alarm-title">アラームを追加</h3>
+            <div class="form-group">
+                <label>名前</label>
+                <input type="text" id="modal-alarm-name" placeholder="例: 起床">
+            </div>
+            <div class="form-group">
+                <label>時刻</label>
+                <input type="time" id="modal-alarm-time" required>
+            </div>
+            <div class="form-group">
+                <label style="margin-bottom: 4px; font-size: 0.9rem; color: var(--text-muted);">繰り返し（曜日指定）</label>
+                <div id="modal-alarm-days" style="display: flex; gap: 4px; justify-content: space-between;">
+                    <button type="button" class="day-btn active" data-day="0">日</button>
+                    <button type="button" class="day-btn active" data-day="1">月</button>
+                    <button type="button" class="day-btn active" data-day="2">火</button>
+                    <button type="button" class="day-btn active" data-day="3">水</button>
+                    <button type="button" class="day-btn active" data-day="4">木</button>
+                    <button type="button" class="day-btn active" data-day="5">金</button>
+                    <button type="button" class="day-btn active" data-day="6">土</button>
+                </div>
+            </div>
+            <div class="form-group checkbox" style="display: flex; align-items: center; gap: 8px;">
+                <label style="margin: 0;"><input type="checkbox" id="modal-alarm-snooze"> スヌーズ</label>
+                <input type="number" id="modal-alarm-snooze-interval" min="1" max="60" value="5" style="width: 70px; padding: 4px; margin-left: 8px;">
+                <span style="font-size: 0.9rem; color: var(--text-muted);">分間隔</span>
+            </div>
+            <div class="modal-actions">
+                <button id="modal-alarm-cancel" class="btn">キャンセル</button>
+                <button id="modal-alarm-save" class="btn primary">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-pomodoro" class="modal-overlay hidden">
+        <div class="modal-content glass-panel" style="max-width: 300px;">
+            <h3 id="modal-pomodoro-title" style="margin-bottom: 24px;">ポモドーロ設定</h3>
+            <div class="form-group row" style="justify-content: space-between; margin-bottom: 16px;">
+                <label style="width: auto;">Pomodoro</label>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <input type="number" id="modal-pomo-pomo" min="1" max="120" style="width: 70px; text-align: center;"> <span style="color: var(--text-muted); font-size: 0.9rem;">分</span>
+                </div>
+            </div>
+            <div class="form-group row" style="justify-content: space-between; margin-bottom: 16px;">
+                <label style="width: auto;">Short Break</label>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <input type="number" id="modal-pomo-short" min="1" max="60" style="width: 70px; text-align: center;"> <span style="color: var(--text-muted); font-size: 0.9rem;">分</span>
+                </div>
+            </div>
+            <div class="form-group row" style="justify-content: space-between; margin-bottom: 24px;">
+                <label style="width: auto;">Long Break</label>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <input type="number" id="modal-pomo-long" min="1" max="60" style="width: 70px; text-align: center;"> <span style="color: var(--text-muted); font-size: 0.9rem;">分</span>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="modal-pomodoro-cancel" class="btn">キャンセル</button>
+                <button id="modal-pomodoro-save" class="btn primary">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="context-menu" class="context-menu hidden glass-panel">
+        <button id="ctx-edit"><i data-lucide="edit-2"></i> 編集</button>
+        <button id="ctx-pin"><i data-lucide="pin"></i> ピン留め切替</button>
+        <button id="ctx-delete" class="danger"><i data-lucide="trash-2"></i> 削除</button>
+    </div>
+
+    <div id="active-alarm-overlay" class="active-alarm-overlay hidden">
+        <div id="alarm-ring-box" class="alarm-ring-box glass-panel">
+            <i data-lucide="bell-ringing" class="ring-icon"></i>
+            <h2 id="active-alarm-title">時間です！</h2>
+            <p id="active-alarm-desc">Timer finished</p>
+            <div class="alarm-actions" style="display: flex; gap: 16px; justify-content: center;">
+                <button id="active-alarm-stop" class="btn primary huge">ストップ</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
