@@ -514,6 +514,8 @@ input:checked + .slider:before { transform: translateX(20px); }
     width: 90%; max-width: 400px; padding: 24px;
     display: flex; flex-direction: column; gap: 16px;
     background: rgba(30, 41, 59, 0.95);
+    max-height: 90vh; /* 画面の高さの90%を最大とする */
+    overflow-y: auto; /* はみ出た場合は縦スクロール可能にする */
 }
 .form-group { display: flex; flex-direction: column; gap: 8px; }
 .form-group.checkbox { flex-direction: row; align-items: center; }
