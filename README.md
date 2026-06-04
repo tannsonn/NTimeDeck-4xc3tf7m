@@ -20,3 +20,8 @@ NTimeDeck は、タイマー・アラーム・ポモドーロ機能を備えたW
 * 自動切換え機能を搭載
 
 
+##  開発プロセス
+本アプリケーションの設計、ロジック構築、およびコーディングは、AI（**Gemini** および **Google Antigravity**）を用いて作成されています。
+
+## 使用音源
+* **効果音ラボ**: [https://soundeffect-lab.info/](https://soundeffect-lab.info/)
