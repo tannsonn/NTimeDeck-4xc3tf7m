@@ -184,9 +184,10 @@ const App = {
 
         // Keyboard Shortcuts for Modals
         document.addEventListener('keydown', (e) => {
-            // 現在開いているモーダルを取得
-            const openModal = document.querySelector('.modal-overlay:not(.hidden)');
-            if (!openModal) return; // モーダルが開いていなければ何もしない
+            // 現在開いているモーダルをすべて取得し、一番手前（配列の最後）のものを対象とする
+            const openModals = document.querySelectorAll('.modal-overlay:not(.hidden)');
+            if (openModals.length === 0) return;
+            const openModal = openModals[openModals.length - 1];
 
             if (e.key === 'Escape') {
                 e.preventDefault();
