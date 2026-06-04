@@ -1,1 +1,1 @@
-# my-aesthetic-timer
+# aesthetic-timer
