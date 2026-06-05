@@ -979,7 +979,7 @@ const App = {
             else startBtn.classList.add('primary');
             
             if (this.activeTab === 'timer') {
-                document.title = activeT.isRunning ? `${disp.textContent} - ${activeT.name}` : 'Aesthetic Timer';
+                document.title = activeT.isRunning ? `${disp.textContent} - ${activeT.name}` : 'NTimeDeck';
             }
         } else {
             disp.textContent = '00:00';
@@ -1069,7 +1069,7 @@ const App = {
         else btn.classList.add('primary');
 
         if (this.activeTab === 'pomodoro') {
-            document.title = state.pomodoro.isRunning ? `${this.formatTime(state.pomodoro.remaining)} - ${state.pomodoro.mode}` : 'Aesthetic Timer';
+            document.title = state.pomodoro.isRunning ? `${this.formatTime(state.pomodoro.remaining)} - ${state.pomodoro.mode}` : 'NTimeDeck';
         }
     },
 
