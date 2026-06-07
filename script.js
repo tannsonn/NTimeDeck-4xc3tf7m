@@ -662,9 +662,18 @@ const App = {
                 pageY = e.pageY;
             }
 
+            ctx.classList.remove('hidden');
+            
+            const rect = ctx.getBoundingClientRect();
+            if (pageY + rect.height > window.innerHeight) {
+                pageY = window.innerHeight - rect.height - 8;
+            }
+            if (pageX + rect.width > window.innerWidth) {
+                pageX = window.innerWidth - rect.width - 8;
+            }
+
             ctx.style.left = `${pageX}px`;
             ctx.style.top = `${pageY}px`;
-            ctx.classList.remove('hidden');
             
             if (type === 'pomo-mode') {
                 document.getElementById('ctx-pin').style.display = 'none';
