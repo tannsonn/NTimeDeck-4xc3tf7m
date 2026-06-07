@@ -653,23 +653,34 @@ const App = {
             this.contextMenuTarget = { id: item.id, type: type };
             const ctx = document.getElementById('context-menu');
             
-            let pageX, pageY;
+            let clientX, clientY;
             if (e.touches && e.touches.length > 0) {
-                pageX = e.touches[0].pageX;
-                pageY = e.touches[0].pageY;
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
             } else {
-                pageX = e.pageX;
-                pageY = e.pageY;
+                clientX = e.clientX;
+                clientY = e.clientY;
             }
 
             ctx.classList.remove('hidden');
             
             const rect = ctx.getBoundingClientRect();
-            if (pageY + rect.height > window.innerHeight) {
-                pageY = window.innerHeight - rect.height - 8;
+            let topPos = clientY;
+            let leftPos = clientX;
+            
+            if (topPos + rect.height > window.innerHeight) {
+                topPos = window.innerHeight - rect.height - 8;
             }
-            if (pageX + rect.width > window.innerWidth) {
-                pageX = window.innerWidth - rect.width - 8;
+            
+            if (topPos < 8) {
+                topPos = 8;
+            }
+            
+            if (leftPos + rect.width > window.innerWidth) {
+                leftPos = window.innerWidth - rect.width - 8;
+            }
+            if (leftPos < 8) {
+                leftPos = 8;
             }
 
             ctx.style.left = `${pageX}px`;
