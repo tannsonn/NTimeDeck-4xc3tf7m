@@ -653,38 +653,18 @@ const App = {
             this.contextMenuTarget = { id: item.id, type: type };
             const ctx = document.getElementById('context-menu');
             
-            let clientX, clientY;
+            let pageX, pageY;
             if (e.touches && e.touches.length > 0) {
-                clientX = e.touches[0].clientX;
-                clientY = e.touches[0].clientY;
+                pageX = e.touches[0].pageX;
+                pageY = e.touches[0].pageY;
             } else {
-                clientX = e.clientX;
-                clientY = e.clientY;
-            }
-
-            ctx.classList.remove('hidden');
-            
-            const rect = ctx.getBoundingClientRect();
-            let topPos = clientY;
-            let leftPos = clientX;
-            
-            if (topPos + rect.height > window.innerHeight) {
-                topPos = window.innerHeight - rect.height - 8;
-            }
-            
-            if (topPos < 8) {
-                topPos = 8;
-            }
-            
-            if (leftPos + rect.width > window.innerWidth) {
-                leftPos = window.innerWidth - rect.width - 8;
-            }
-            if (leftPos < 8) {
-                leftPos = 8;
+                pageX = e.pageX;
+                pageY = e.pageY;
             }
 
             ctx.style.left = `${pageX}px`;
             ctx.style.top = `${pageY}px`;
+            ctx.classList.remove('hidden');
             
             if (type === 'pomo-mode') {
                 document.getElementById('ctx-pin').style.display = 'none';
