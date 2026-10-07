@@ -116,6 +116,12 @@ const App = {
     },
 
     setupEventListeners() {
+        //同期
+        window.addEventListener('storage', (e) => {
+            if (e.key === STORAGE_KEY) {
+                loadState();
+                this.renderAll();
+            }
         // Hamburger Menu
         document.getElementById('menu-btn').addEventListener('click', () => {
             document.getElementById('nav-drawer').classList.toggle('hidden');
