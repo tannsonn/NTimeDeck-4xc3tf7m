@@ -122,6 +122,7 @@ const App = {
                 loadState();
                 this.renderAll();
             }
+        });
         // Hamburger Menu
         document.getElementById('menu-btn').addEventListener('click', () => {
             document.getElementById('nav-drawer').classList.toggle('hidden');
